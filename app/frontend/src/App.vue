@@ -1,30 +1,48 @@
-<script setup lang="ts">
-import HelloWorld from './components/HelloWorld.vue'
-</script>
-
 <template>
   <div>
-    <a href="https://vitejs.dev" target="_blank">
-      <img src="/vite.svg" class="logo" alt="Vite logo" />
-    </a>
-    <a href="https://vuejs.org/" target="_blank">
-      <img src="./assets/vue.svg" class="logo vue" alt="Vue logo" />
-    </a>
+    <Sidebar />
+    <Navbar />
+    <div class="container">
+      <div class="content">
+        <!-- Conteúdo principal da sua aplicação aqui -->
+        <CenterContent  />
+      </div>
+    </div>
   </div>
-  <HelloWorld msg="Vite + Vue" />
 </template>
 
-<style scoped>
-.logo {
-  height: 6em;
-  padding: 1.5em;
-  will-change: filter;
-  transition: filter 300ms;
+<script>
+import Navbar from './components/Navbar.vue';
+import Sidebar from './components/Sidebar.vue';
+import CenterContent from './components/CenterContent.vue';
+
+export default {
+  components: {
+    Navbar,
+    Sidebar,
+    CenterContent
+  }
 }
-.logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
+</script>
+
+<style>
+.container {
+  display: flex;
+  flex-direction: column;
+  height: fit-content; /* 100% of viewport height */
 }
-.logo.vue:hover {
-  filter: drop-shadow(0 0 2em #42b883aa);
+
+.content {
+  flex-grow: 1; /* Fill remaining space */
+  padding: 20px;
+}
+
+/* Additional styling for a cohesive layout */
+.sidebar {
+  flex: 0 0 200px; /* Fix sidebar width */
+}
+
+.navbar {
+  flex: 1; /* Fill remaining space */
 }
 </style>
