@@ -9,47 +9,51 @@
         <h4>Destino:</h4>
         <!-- <input type="text" placeholder="Selecione um Destino" v-model="input2"> -->
         <v-select
-          label="Selecione um Destino"
-          :items="['California', 'Colorado', 'Florida', 'Georgia', 'Texas', 'Wyoming']"
-        ></v-select>
+                label="Select"
+                :items="['California', 'Colorado', 'Florida', 'Georgia', 'Texas', 'Wyoming']"
+                variant="outlined"
+                v-model="location"
+              ></v-select>
         <h4>Data:</h4>
         <div>
           <input type="date" id="data" v-model="selectedDate" placeholder="Selecione uma data">
         </div>
         <br>
         <div class="button-container">
-          <button @click="submitForm">Enviar</button>
+          <button @click="submitRequest">Enviar</button>
         </div>
       </div>
       <div class="right-side">
-        <p v-if="selectedData">{{ selectedData }}</p>
+        <p v-if="bothSelected">
+          <SearchResult fastOption='false', ticketOption="{}"/>
+          
+        </p>
         <p v-else>Nenhuma data selecionada.</p>
       </div>
     </div>
   </div>
 </template>
 
-<script>
-import VueDatePicker from '@vuepic/vue-datepicker';
-import '@vuepic/vue-datepicker/dist/main.css';
+<script setup>
+import { ref } from 'vue';
 
-export default {
-  data() {
-    return {
-      menu: false,
-      date: new Date().toISOString().substr(0, 10), // Default date today
-    };
-  },
-  methods: {
-    submitForm() {
-      // Process form data here
-      this.selectedData = `${this.input1} - ${this.input2} - ${this.selectedDate}`;
-      // You can modify this logic to fit your actual requirements
+
+var location = ref("");
+var selectedDate = ref("");
+var bothSelected = ref(false)
+
+const submitRequest = () => {
+    if (selectedDate || location) {
+      console.log(`${selectedDate.value} ${location.value}`);
+      bothSelected.value = ref(true)
     }
-  },
-  
-};
+  }
 
+</script>
+
+<script>
+// export { selectedDate, location }
+import SearchResult from "./SearchResult.vue";
 </script>
 
 <style scoped>
@@ -148,5 +152,14 @@ button {
 
 button:hover {
   background-color: #0056b3;
+}
+
+.right-side-less-expensive {
+  height: 10px;
+  background-color: red;
+}
+.right-side-short-distance {
+  background-color: greenyellow;
+  height: 10px;
 }
 </style>

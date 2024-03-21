@@ -3,8 +3,6 @@
     <Sidebar />
     <Navbar />
     <div class="container">
-      
-        <!-- Conteúdo principal da sua aplicação aqui -->
         <CenterContent  />
     </div>
   </div>
@@ -19,7 +17,7 @@ export default {
   components: {
     Navbar,
     Sidebar,
-    CenterContent
+    CenterContent,
   },
 }
 </script>
@@ -33,11 +31,8 @@ export default {
   margin-left: 14rem;
 }
 
-
-
-/* Additional styling for a cohesive layout */
 .sidebar {
-  flex: 0 0 200px; /* Fix sidebar width */
+  flex: 0 0 200px;
 }
 
 .navbar {
