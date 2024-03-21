@@ -3,10 +3,9 @@
     <Sidebar />
     <Navbar />
     <div class="container">
-      <div class="content">
+      
         <!-- Conteúdo principal da sua aplicação aqui -->
         <CenterContent  />
-      </div>
     </div>
   </div>
 </template>
@@ -30,12 +29,10 @@ export default {
   display: flex;
   flex-direction: column;
   height: fit-content; /* 100% of viewport height */
+  align-items: center;
 }
 
-.content {
-  flex-grow: 1; /* Fill remaining space */
-  padding: 20px;
-}
+
 
 /* Additional styling for a cohesive layout */
 .sidebar {
@@ -45,4 +42,6 @@ export default {
 .navbar {
   flex: 1; /* Fill remaining space */
 }
+
+@ts-ignore
 </style>
