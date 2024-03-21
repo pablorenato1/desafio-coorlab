@@ -1,13 +1,17 @@
 <template>
   <div class="center-content">
     <div class="top-line">
-      <p class="center-content-title">Calculadora de Viagem</p>
+      <h2 class="center-content-title"><v-icon icon="mdi-truck-delivery-outline"></v-icon> Calculadora de Viagem</h2>
     </div>
     <div class="center-content-container">
       <div class="left-side">
-        <h2>Calcule o Valor da Viagem</h2>
+        <h2><v-icon icon="mdi-hand-coin-outline"></v-icon> Calcule o Valor da Viagem</h2>
         <h4>Destino:</h4>
-        <input type="text" placeholder="Selecione um Destino" v-model="input2">
+        <!-- <input type="text" placeholder="Selecione um Destino" v-model="input2"> -->
+        <v-select
+          label="Selecione um Destino"
+          :items="['California', 'Colorado', 'Florida', 'Georgia', 'Texas', 'Wyoming']"
+        ></v-select>
         <h4>Data:</h4>
         <div>
           <input type="date" id="data" v-model="selectedDate" placeholder="Selecione uma data">
@@ -26,13 +30,14 @@
 </template>
 
 <script>
+import VueDatePicker from '@vuepic/vue-datepicker';
+import '@vuepic/vue-datepicker/dist/main.css';
+
 export default {
   data() {
     return {
-      input1: '',
-      input2: '',
-      selectedDate: null,
-      selectedData: ''
+      menu: false,
+      date: new Date().toISOString().substr(0, 10), // Default date today
     };
   },
   methods: {
@@ -41,8 +46,10 @@ export default {
       this.selectedData = `${this.input1} - ${this.input2} - ${this.selectedDate}`;
       // You can modify this logic to fit your actual requirements
     }
-  }
+  },
+  
 };
+
 </script>
 
 <style scoped>
@@ -51,11 +58,11 @@ export default {
 }
 
 .center-content {
-  margin: 2rem auto;
+  margin: 2rem;
   max-width: 1280px;
   background-color: #fff;
   border-radius: 2px;
-  width: 60%;
+  width: 80%;
   box-shadow: 0 3px 8px -2px rgb(95, 93, 93);
   overflow: hidden;
 }
@@ -75,8 +82,8 @@ export default {
 
 .center-content-title {
   padding: 1rem;
-  font-weight: 700;
-  margin: 0; /* Remove default margin for the title */
+  font-weight: 400;
+  margin-left: 1rem;
 }
 
 .left-side {
@@ -108,6 +115,10 @@ h4 {
   text-align: left;
   margin-bottom: 0;
   font-weight: 100;
+}
+
+h2 {
+  padding-bottom: 5%;
 }
 
 input {

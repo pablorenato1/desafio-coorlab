@@ -1,5 +1,5 @@
 :root {
-    --margin_left: 13rem;
+    /* --margin_left: 13rem; */
     --button-color: #03a7b3;
 }
 
@@ -7,5 +7,4 @@
 body {
     background-color: #f8f8f8;
     margin: 0;
-    margin-left: var(--margin_left);
 }

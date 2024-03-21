@@ -20,7 +20,7 @@ export default {
     Navbar,
     Sidebar,
     CenterContent
-  }
+  },
 }
 </script>
 
@@ -28,8 +28,9 @@ export default {
 .container {
   display: flex;
   flex-direction: column;
-  height: fit-content; /* 100% of viewport height */
+  height: fit-content;
   align-items: center;
+  margin-left: 14rem;
 }
 
 
@@ -40,7 +41,7 @@ export default {
 }
 
 .navbar {
-  flex: 1; /* Fill remaining space */
+  margin-left: 17rem;
 }
 
 @ts-ignore
