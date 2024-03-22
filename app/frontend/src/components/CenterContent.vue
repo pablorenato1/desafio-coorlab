@@ -1,39 +1,3 @@
-<template>
-  <div class="center-content">
-    <div class="top-line">
-      <h2 class="center-content-title"><v-icon icon="mdi-truck-delivery-outline"></v-icon> Calculadora de Viagem</h2>
-    </div>
-    <div class="center-content-container">
-      <div class="left-side">
-        <h2><v-icon icon="mdi-hand-coin-outline"></v-icon> Calcule o Valor da Viagem</h2>
-        <h4>Destino:</h4>
-        <!-- <input type="text" placeholder="Selecione um Destino" v-model="input2"> -->
-        <v-select
-                label="Select"
-                :items="['California', 'Colorado', 'Florida', 'Georgia', 'Texas', 'Wyoming']"
-                variant="outlined"
-                v-model="location"
-              ></v-select>
-        <h4>Data:</h4>
-        <div>
-          <input type="date" id="data" v-model="selectedDate" placeholder="Selecione uma data">
-        </div>
-        <br>
-        <div class="button-container">
-          <button @click="submitRequest">Enviar</button>
-        </div>
-      </div>
-      <div class="right-side">
-        <p v-if="bothSelected">
-          <SearchResult fastOption='false', ticketOption="{}"/>
-          
-        </p>
-        <p v-else>Nenhuma data selecionada.</p>
-      </div>
-    </div>
-  </div>
-</template>
-
 <script setup>
 import { ref } from 'vue';
 
@@ -48,13 +12,58 @@ const submitRequest = () => {
       bothSelected.value = ref(true)
     }
   }
+const test = {
+        name: "PASSARO VERDE",
+        price: "R$ 650,00",
+        duration: "14h",
+        seat: "2 (convencional)",
+        seatType: "5L",
+        isCheap: true,
+    }
 
 </script>
 
 <script>
-// export { selectedDate, location }
 import SearchResult from "./SearchResult.vue";
 </script>
+
+<template>
+  <div class="center-content">
+    <div class="top-line">
+      <h2 class="center-content-title"><v-icon icon="mdi-truck-delivery-outline"></v-icon> Calculadora de Viagem</h2>
+    </div>
+    <div class="center-content-container">
+      <div class="left-side">
+        <h2><v-icon icon="mdi-hand-coin-outline"></v-icon> Calcule o Valor da Viagem</h2>
+        <h4>Destino:</h4>
+        <v-select
+                label="Select"
+                :items="['California', 'Colorado', 'Florida', 'Georgia', 'Texas', 'Wyoming']"
+                variant="outlined"
+                v-model="location"
+                class="input-field"
+              ></v-select>
+        <h4>Data:</h4>
+        <div>
+          <input type="date" id="data" v-model="selectedDate" placeholder="Selecione uma data" class="input-field">
+        </div>
+        <br>
+        <div class="button-container">
+          <button @click="submitRequest">Enviar</button>
+        </div>
+      </div>
+      <div class="right-side">
+        <p v-if="bothSelected">
+          <SearchResult :ticketOption=test></SearchResult>
+          
+        </p>
+        <p v-else>Nenhuma data selecionada.</p>
+      </div>
+    </div>
+  </div>
+</template>
+
+
 
 <style scoped>
 :root {
@@ -66,7 +75,7 @@ import SearchResult from "./SearchResult.vue";
   max-width: 1280px;
   background-color: #fff;
   border-radius: 2px;
-  width: 80%;
+  width: 70%;
   box-shadow: 0 3px 8px -2px rgb(95, 93, 93);
   overflow: hidden;
 }
@@ -75,6 +84,7 @@ import SearchResult from "./SearchResult.vue";
   display: flex;
   max-height: fit-content;
   height: 87%;
+  /* wid */
 }
 
 .top-line {
@@ -103,16 +113,20 @@ import SearchResult from "./SearchResult.vue";
 
 .right-side {
   flex: 2;
-  background-color: #ccc;
+  background-color: #fff;
   padding: 20px;
   border-radius: 6px;
   margin: 1rem 1rem 1rem 0;
 }
 
 .right-side p {
+  display: flex;
+  flex-direction: column;
+  /* justify-content: center; */
+  align-items: center;
   color: #333;
   font-style: italic;
-  margin: 0; /* Remove default margin for paragraphs */
+  margin: 0;
 }
 
 h4 {
@@ -123,6 +137,7 @@ h4 {
 
 h2 {
   padding-bottom: 5%;
+  font-size: 18px;
 }
 
 input {
@@ -138,7 +153,7 @@ input {
 
 button {
   padding: 10px;
-  background-color: #007bff;
+  background-color: #03a7b4;
   color: white;
   border: none;
   cursor: pointer;
