@@ -1,8 +1,12 @@
 <script setup>
+import SearchResult from "./SearchResult.vue";
+// import { onMounted } from 'vue';
 import { ref } from 'vue';
+import axios from 'axios';
 
 
 var location = ref("");
+var allLocation = ref([]);
 var selectedDate = ref("");
 var bothSelected = ref(false)
 
@@ -24,9 +28,35 @@ const test = {
         isCheap: true,
     }
 
+    const getLocations = () => {
+  fetch('http://localhost:3000/api/locals')
+    .then(response => {
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+      return response.clone().json();
+    })
+    .then(data => {
+      allLocation.value = data;
+      console.log(allLocation.value);
+    })
+    .catch(error => {
+      console.error('Error fetching locations:', error);
+    });
+};
+
+// Call the function to fetch locations
+getLocations();
+
   const getTickets = () => {
   return new Promise((resolve, reject) => {
-    fetch('http://localhost:3000/api/ticket')
+    fetch('http://localhost:3000/api/ticket', {
+      method:'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(location.value)
+    })
       .then(response => {
         if (!response.ok) {
           throw new Error('Network response was not ok');
@@ -43,21 +73,9 @@ const test = {
   });
 };
 
-// Usage example
-getTickets()
-  .then(data => {
-    console.log('Tickets:', data);
-    // Here you can work with the received data
-  })
-  .catch(error => {
-    console.error('Error fetching tickets:', error);
-  });
 
 </script>
 
-<script>
-import SearchResult from "./SearchResult.vue";
-</script>
 
 <template>
   <div class="center-content">
@@ -70,7 +88,7 @@ import SearchResult from "./SearchResult.vue";
         <h4>Destino:</h4>
         <v-select
                 label="Select"
-                :items="['California', 'Colorado', 'Florida', 'Georgia', 'Texas', 'Wyoming']"
+                :items=allLocation
                 variant="outlined"
                 v-model="location"
                 class="input-field"
