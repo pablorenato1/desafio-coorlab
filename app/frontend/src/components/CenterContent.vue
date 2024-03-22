@@ -10,6 +10,9 @@ const submitRequest = () => {
     if (selectedDate || location) {
       console.log(`${selectedDate.value} ${location.value}`);
       bothSelected.value = ref(true)
+      getTickets().then(data => {
+        console.log("Tickets: ",data)
+      })
     }
   }
 const test = {
@@ -20,6 +23,35 @@ const test = {
         seatType: "5L",
         isCheap: true,
     }
+
+  const getTickets = () => {
+  return new Promise((resolve, reject) => {
+    fetch('http://localhost:3000/api/ticket')
+      .then(response => {
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
+        console.log(response)
+        return response.json();
+      })
+      .then(data => {
+        resolve(data);
+      })
+      .catch(error => {
+        reject(error);
+      });
+  });
+};
+
+// Usage example
+getTickets()
+  .then(data => {
+    console.log('Tickets:', data);
+    // Here you can work with the received data
+  })
+  .catch(error => {
+    console.error('Error fetching tickets:', error);
+  });
 
 </script>
 
