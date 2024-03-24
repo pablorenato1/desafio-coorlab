@@ -80,7 +80,7 @@ getLocations();
 <template>
   <div class="center-content">
     <div class="top-line">
-      <h2 class="center-content-title"><v-icon icon="mdi-truck-delivery-outline"></v-icon> Calculadora de Viagem</h2>
+      <h2 class="center-content-title"><v-icon icon="mdi mdi-airplane"></v-icon> Calculadora de Viagem</h2>
     </div>
     <div class="center-content-container">
       <div class="left-side">
