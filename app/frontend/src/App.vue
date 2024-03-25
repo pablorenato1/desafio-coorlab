@@ -38,6 +38,4 @@ export default {
 .navbar {
   margin-left: 17rem;
 }
-
-@ts-ignore
 </style>

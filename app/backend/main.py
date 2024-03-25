@@ -15,67 +15,64 @@ def search_ticket_per_city(city, tickets_option):
 def find_cheapest_fastest_tickets(tickets_options):
     cheapest_ticket = None
     fastest_ticket = None
-    cheapest_price_confort = float('inf')
-    cheapest_price_economic = float('inf')
-    shortest_duration = float('inf')
+    cheapest_price = float('inf')
+    fastest_duration = float('inf')
 
     for ticket in tickets_options:
         price_confort = float(ticket["price_confort"].replace("R$ ", "").replace(",", "."))
         price_economic = float(ticket["price_econ"].replace("R$ ", "").replace(",", "."))
         duration_hours = int(ticket["duration"].replace("h", ""))
 
-        # Check if it's cheaper than previous
-        if price_confort < cheapest_price_confort:
-            cheapest_price_confort = price_confort
-            cheapest_ticket = ticket
+        # Check if the comfort ticket is cheaper
+        if price_confort < price_economic:
+            if price_confort < cheapest_price:
+                cheapest_price = price_confort
+                cheapest_ticket = ticket
 
-        if price_economic < cheapest_price_economic:
-            cheapest_price_economic = price_economic
-            cheapest_ticket = ticket
+        # Check if the economic ticket is cheaper
+        else:
+            if price_economic < cheapest_price:
+                cheapest_price = price_economic
+                cheapest_ticket = ticket
 
-        # Check if it's faster than previous
-        if duration_hours < shortest_duration:
-            shortest_duration = duration_hours
+        # Check if it's faster than previous with comfort
+        if price_confort < float('inf') and duration_hours < fastest_duration:
+            fastest_duration = duration_hours
             fastest_ticket = ticket
 
-    # If the cheapest is also the fastest, return only one ticket
-    if cheapest_ticket["id"] == fastest_ticket["id"]:
-        print(cheapest_price_economic)
-        print(cheapest_price_confort)
-        if cheapest_price_confort < cheapest_price_economic:
-            price_range = "R$ {:.2f} - R$ {:.2f}".format(cheapest_price_confort, cheapest_price_economic)
-        else:
-            price_range = "R$ {:.2f} - R$ {:.2f}".format(cheapest_price_economic, cheapest_price_confort)
-        ticket = {
-            "name": cheapest_ticket["name"],
-            "price":price_range,
-            "duration": fastest_ticket["duration"],
-            "seat_type": "",
-            "seat_code": cheapest_ticket["bed"],
-            "ticket_code": 2  # Both cheapest and fastest
-        }
-        return [ticket]
+    # Determine seat_code and seat_type based on the cheapest ticket
+    if cheapest_ticket["price_confort"] < cheapest_ticket["price_econ"]:
+        cheapest_seat_type = "Leito"
+        cheapest_seat_code = cheapest_ticket["bed"]
+    else:
+        cheapest_seat_type = "Poltrona"
+        cheapest_seat_code = cheapest_ticket["seat"]
 
-    # Otherwise, return both tickets
+    # Create the cheapest and fastest ticket objects
     cheapest = {
         "name": cheapest_ticket["name"],
-        "price": "R$ {:.2f}".format(cheapest_price_economic),
+        "price": "R$ {:.2f}".format(cheapest_price),
         "duration": cheapest_ticket["duration"],
-        "seat_type": "Poltrona",
-        "seat_code": cheapest_ticket["bed"],
+        "seat_type": cheapest_seat_type,
+        "seat_code": cheapest_seat_code,
         "ticket_code": 0  # Cheapest
     }
 
     fastest = {
-            "name": fastest_ticket["name"],
-            "price": fastest_ticket["price_confort"],
-            "duration": fastest_ticket["duration"],
-            "seat_type": "Leito",
-            "seat_code": fastest_ticket["bed"],
-            "ticket_code": 1  # Fastest
-        }
+        "name": fastest_ticket["name"],
+        "price": "R$ {:.2f}".format(float(fastest_ticket["price_confort"].replace("R$ ", "").replace(",", "."))),
+        "duration": fastest_ticket["duration"],
+        "seat_type": "Leito",
+        "seat_code": fastest_ticket["bed"],
+        "ticket_code": 1  # Fastest
+    }
 
-    return [cheapest, fastest]
+    # If the cheapest and fastest are the same ticket
+    if cheapest_ticket["id"] == fastest_ticket["id"]:
+        return [fastest]
+    else:
+        return [cheapest, fastest]
+
 
 
 def load_ticket():
@@ -96,15 +93,10 @@ def get_locations():
 @app.route('/api/ticket', methods=['POST'])
 def get_ticket():
     city_requested = request.json
-    _restult = search_ticket_per_city(city_requested, tickets_option)
-    options = find_cheapest_fastest_tickets(_restult)
-    print("cheapest:", options)
+    _result = search_ticket_per_city(city_requested['location'], tickets_option)
+    options = find_cheapest_fastest_tickets(_result)
 
-    test = {
-        # "option1": option1,
-        # "option2": option2
-    }
-    return jsonify(test)
+    return jsonify(options)
 
 if __name__ == '__main__':
     app.run(port=3000)

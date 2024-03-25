@@ -1,44 +1,34 @@
 <script setup>
-import SearchResult from "./SearchResult.vue";
-// import { onMounted } from 'vue';
 import { ref } from 'vue';
-import axios from 'axios';
+import { VueElement } from 'vue';
+import SearchResult from './SearchResult.vue';
 
+// Variables
+const location = ref("");
+const allLocation = ref([]);
+const selectedDate = ref("");
+const noDataSelected = ref(true);
+let tickets = ref([]);
+const dialog = ref(false)
 
-var location = ref("");
-var allLocation = ref([]);
-var selectedDate = ref("");
-var bothSelected = ref(false)
+const clearInputs = () => {
+  tickets = []
+  selectedDate.value = ""
+  location.value = ""
+}
 
-const submitRequest = () => {
-    if (selectedDate || location) {
-      console.log(`${selectedDate.value} ${location.value}`);
-      bothSelected.value = ref(true)
-      getTickets().then(data => {
-        console.log("Tickets: ",data)
-      })
-    }
-  }
-const test = {
-        name: "PASSARO VERDE",
-        price: "R$ 650,00",
-        duration: "14h",
-        seat: "2 (convencional)",
-        seatType: "5L",
-        isCheap: true,
-    }
-
-    const getLocations = () => {
+// Function to fetch locations
+const getLocations = () => {
   fetch('http://localhost:3000/api/locals')
     .then(response => {
       if (!response.ok) {
         throw new Error('Network response was not ok');
       }
-      return response.clone().json();
+      return response.json();
     })
     .then(data => {
       allLocation.value = data;
-      console.log(allLocation.value);
+      console.log("Locations:", allLocation.value);
     })
     .catch(error => {
       console.error('Error fetching locations:', error);
@@ -48,20 +38,39 @@ const test = {
 // Call the function to fetch locations
 getLocations();
 
-  const getTickets = () => {
+// Function to submit the request
+const submitRequest = () => {
+  // 
+  if (!selectedDate.value || !location.value) {
+    dialog.value = true;
+    return;
+  }
+
+
+  getTickets().then(data => {
+    tickets.value = data;
+    console.log(`ticket updated: ${tickets}`)
+    noDataSelected.value = false;
+  });
+};
+
+// Function to get tickets
+const getTickets = () => {
   return new Promise((resolve, reject) => {
     fetch('http://localhost:3000/api/ticket', {
-      method:'POST',
+      method: 'POST',
       headers: {
         'Content-Type': 'application/json'
       },
-      body: JSON.stringify(location.value)
+      body: JSON.stringify({
+        location: location.value,
+        date: selectedDate.value
+      })
     })
       .then(response => {
         if (!response.ok) {
           throw new Error('Network response was not ok');
         }
-        console.log(response)
         return response.json();
       })
       .then(data => {
@@ -72,8 +81,6 @@ getLocations();
       });
   });
 };
-
-
 </script>
 
 
@@ -86,28 +93,36 @@ getLocations();
       <div class="left-side">
         <h2><v-icon icon="mdi-hand-coin-outline"></v-icon> Calcule o Valor da Viagem</h2>
         <h4>Destino:</h4>
-        <v-select
-                label="Select"
-                :items=allLocation
-                variant="outlined"
-                v-model="location"
-                class="input-field"
-              ></v-select>
+        <v-select label="Select" :items=allLocation variant="outlined" v-model="location"
+          class="inputField"></v-select>
         <h4>Data:</h4>
         <div>
-          <input type="date" id="data" v-model="selectedDate" placeholder="Selecione uma data" class="input-field">
+          <input type="date" id="data" v-model="selectedDate" placeholder="Selecione uma data" class="inputField">
         </div>
         <br>
         <div class="button-container">
-          <button @click="submitRequest">Enviar</button>
+          <button class="sent-button" @click="submitRequest">Enviar</button>
+          <v-btn class="clear-selected" @click="clearInputs">Limpar</v-btn>
+          <v-dialog v-model="dialog" width="auto">
+            <div class="modal">
+              <v-icon class="exlamation-mark-modal">mdi-exclamation-thick</v-icon>
+              <p>Insira os valores para realizar a cotação</p>
+              <v-btn @click="dialog = false">Fechar</v-btn>
+            </div>
+          </v-dialog>
         </div>
       </div>
       <div class="right-side">
-        <p v-if="bothSelected">
-          <SearchResult :ticketOption=test></SearchResult>
-          
-        </p>
-        <p v-else>Nenhuma data selecionada.</p>
+        <div class="right-container">
+          <div class="right-container-content" v-if="noDataSelected">
+            <h3>Não há nenhum dado seleciondo</h3>
+          </div>
+
+          <div class="right-container-content" v-else>
+            <h3 class="distance-content">Estas são as melhores alternativas de viagem para a data selecionada</h3>
+            <SearchResult :ticketOption=tickets></SearchResult>
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -118,6 +133,33 @@ getLocations();
 <style scoped>
 :root {
   --margin: 13rem;
+}
+
+.distance-content {
+  margin-bottom: 2%;
+}
+
+.sent-button {
+  padding: 10px;
+  background-color: #03a7b4;
+  color: white;
+  border: none;
+  cursor: pointer;
+  border-radius: 4px;
+  width: 200px;
+}
+
+.clear-selected {
+  background-color: #f2a42f;
+  color: black;
+  border: none;
+  padding: 4px 20px;
+  border-radius: 4px;
+  font-size: 12px;
+  cursor: pointer;
+  width: 200px;
+  bottom: 0;
+  margin-top: 2%;
 }
 
 .center-content {
@@ -201,18 +243,10 @@ input {
   width: 100%;
 }
 
-button {
-  padding: 10px;
-  background-color: #03a7b4;
-  color: white;
-  border: none;
-  cursor: pointer;
-  border-radius: 4px;
-  width: 140px;
-}
-
 .button-container {
-  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center
 }
 
 button:hover {
@@ -223,8 +257,43 @@ button:hover {
   height: 10px;
   background-color: red;
 }
+
 .right-side-short-distance {
   background-color: greenyellow;
   height: 10px;
+}
+
+.modal {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  background-color: #ffffff;
+  padding-top: 2.5rem;
+  padding-bottom: 1.5rem;
+  padding-left: 5rem;
+  padding-right: 5rem;
+  border-radius: 1rem;
+}
+
+.modal p {
+  font-size: 1.2rem;
+}
+
+.modal button {
+  background-color: #03a8b4;
+  color: #024b55;
+  padding: 0.5rem 1rem;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  text-transform: none;
+}
+
+.exlamation-mark-modal {
+  color: #03a7b4;
+  font-size: 50px;
+  padding: 5px;
+  border: 4px solid #03a7b4;
+  border-radius: 5px;
 }
 </style>
