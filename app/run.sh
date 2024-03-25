@@ -1,3 +1,11 @@
 #!/bin/bash
 
-echo "Implemente aqui o script para executar a sua solução"
+cd frontend
+npm install
+npm run dev &
+
+cd ..
+
+cd backend
+pip install -r requirements.txt
+python3 app.py

@@ -43,10 +43,10 @@ def find_cheapest_fastest_tickets(tickets_options):
     # Determine seat_code and seat_type based on the cheapest ticket
     if cheapest_ticket["price_confort"] < cheapest_ticket["price_econ"]:
         cheapest_seat_type = "Leito"
-        cheapest_seat_code = cheapest_ticket["bed"]
+        cheapest_seat_code = cheapest_ticket["bed"] + " (Completo)"
     else:
         cheapest_seat_type = "Poltrona"
-        cheapest_seat_code = cheapest_ticket["seat"]
+        cheapest_seat_code = cheapest_ticket["seat"] + " (Convencional)"
 
     # Create the cheapest and fastest ticket objects
     cheapest = {
@@ -63,7 +63,7 @@ def find_cheapest_fastest_tickets(tickets_options):
         "price": "R$ {:.2f}".format(float(fastest_ticket["price_confort"].replace("R$ ", "").replace(",", "."))),
         "duration": fastest_ticket["duration"],
         "seat_type": "Leito",
-        "seat_code": fastest_ticket["bed"],
+        "seat_code": fastest_ticket["bed"] + " (Completo)",
         "ticket_code": 1  # Fastest
     }
 
