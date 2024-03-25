@@ -48,3 +48,40 @@
   - Uso: Utilizado para lidar com o Cross-Origin Resource Sharing no backend do Flask, permitindo solicitações frontend para a API backend de diferentes origens.
 
 Essas dependências foram utilizadas no projeto para o desenvolvimento frontend, incluindo componentes Vue.js, gerenciamento de estado, design de UI com Vuetify, e desenvolvimento backend com Flask para criação e gerenciamento de APIs.
+
+
+## Estrutura do Projeto
+
+O projeto foi organizado de maneira simples, com como a pasta principal `app` onde pode ser encontrado a pasta **backend** e **frontend**, no backend pode ser encontrado em python, onde terá o código em Flask que foi utilizado. Um arquivo `data.json` aonde foi armazenado os dados dos bilhetes de viagem. Este arquivo contém as informações sobre as viagens disponíveis, como nome da empresa, preço, tipo de assento, etc.
+
+### Rotas da API
+
+Foram definidas duas rotas principais para a API:
+
+- **`/api/locals`** (método GET): Esta rota retorna a lista de cidades disponíveis para seleção de destino.
+- **`/api/ticket`** (método POST): Esta rota é usada para buscar e retornar os bilhetes de viagem com base na cidade selecionada.
+
+### Lógica de Busca e Seleção de Bilhetes
+
+- A função `search_ticket_per_city` foi criada para filtrar os bilhetes com base na cidade selecionada.
+- A função `find_cheapest_fastest_tickets` foi implementada para encontrar o bilhete mais barato e o mais rápido. Esta função compara os preços de bilhetes de conforto e econômico para determinar o tipo de assento mais barato.
+- Os bilhetes são então retornados como objetos JSON contendo informações como nome da empresa, preço, duração, tipo de assento e código do assento.
+
+### Gerenciamento de Requisições e Respostas
+
+- O Flask foi configurado para lidar com solicitações POST e GET usando as bibliotecas Flask e request.
+- As respostas da API são formatadas como JSON usando a função `jsonify` do Flask, tornando fácil para o frontend consumir os dados.
+
+### Arquivo JSON de Dados
+
+- O arquivo `data.json` foi utilizado como fonte de dados para os bilhetes de viagem. Este arquivo contém os detalhes dos bilhetes, como preço, duração, tipo de assento, etc.
+
+### Integração com o Frontend
+
+- A API Flask backend foi integrada ao frontend Vue.js para permitir que os usuários visualizem e selecionem as opções de viagem de forma interativa.
+
+Este é um resumo geral do processo de desenvolvimento, destacando a utilização do Flask para criar o backend da aplicação, a implementação das rotas da API, a lógica de busca e seleção de bilhetes, e a integração com o frontend Vue.js para proporcionar uma experiência de usuário completa.
+
+## Considerações Finais
+
+Em resumo, o desenvolvimento da Calculadora de Viagens foi uma jornada interessante que me permitiu aprender uma nova stack, diversas tecnologias e novos conceitos. A integração entre o backend e o frontend, a lógica de busca de bilhetes e a estrutura do projeto foram aspectos fundamentais que, somados, representam o conhecimento adquirido durante o período de desenvolvimento deste projeto.
