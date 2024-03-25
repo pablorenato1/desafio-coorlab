@@ -28,7 +28,6 @@ const getLocations = () => {
     })
     .then(data => {
       allLocation.value = data;
-      console.log("Locations:", allLocation.value);
     })
     .catch(error => {
       console.error('Error fetching locations:', error);
@@ -49,7 +48,6 @@ const submitRequest = () => {
 
   getTickets().then(data => {
     tickets.value = data;
-    console.log(`ticket updated: ${tickets}`)
     noDataSelected.value = false;
   });
 };
@@ -105,8 +103,8 @@ const getTickets = () => {
           <v-btn class="clear-selected" @click="clearInputs">Limpar</v-btn>
           <v-dialog v-model="dialog" width="auto">
             <div class="modal">
-              <v-icon class="exlamation-mark-modal">mdi-exclamation-thick</v-icon>
-              <p>Insira os valores para realizar a cotação</p>
+              <img class="modal-exclamation" src="../assets/exclamation.png" alt="" srcset="">
+              <p class="modal-text">Insira os valores para realizar a cotação</p>
               <v-btn @click="dialog = false">Fechar</v-btn>
             </div>
           </v-dialog>
@@ -160,6 +158,15 @@ const getTickets = () => {
   width: 200px;
   bottom: 0;
   margin-top: 2%;
+}
+
+.modal-exclamation {
+  width: 3.5rem;
+  margin-bottom: 1rem;
+}
+
+.modal-text {
+  font-weight: 16px;
 }
 
 .center-content {
