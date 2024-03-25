@@ -6,6 +6,5 @@ npm run dev &
 
 cd ..
 
-cd backend
 pip install -r requirements.txt
-python3 app.py
+python3 main.py
